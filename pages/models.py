@@ -48,3 +48,5 @@ class GroceryStore(Place):
     pass
 
 
+class Hotel(Place):
+    pass
