@@ -5,3 +5,5 @@ class User(User):
     pass
 
 
+class PlaceOwner(User):
+    pass
