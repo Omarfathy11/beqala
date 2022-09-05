@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'pages',
+    'page',
     'user',
 ]
 
@@ -84,8 +84,12 @@ WSGI_APPLICATION = 'beqala.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'boards_django',
+        'USER': 'postgres',
+        'PASSWORD': 'MA7MOUD7EFNY.',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

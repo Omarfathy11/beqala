@@ -6,24 +6,24 @@ from django.contrib.postgres.fields import ArrayField
 
 class Governorate(models.Model):
     name = models.CharField(max_length=30)
-    zipCode = models.IntegerField(max_length=6)
+    zipCode = models.IntegerField()
 
 class City(models.Model):
     name = models.CharField(max_length=30)
-    governorate = models.ForeignKey(Governorate)
+    governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE)
 
 class Address(models.Model):
-    line1 = models.CharField(30)
-    line2 = models.CharField(30)
-    city = models.ForeignKey(City)
+    line1 = models.CharField(max_length=30)
+    line2 = models.CharField(max_length=30)
+    city = models.ForeignKey(City, on_delete=models.CASCADE)
 
 
 
 
 class Phone(models.Model):
-    phone1 = models.CharField(primary_key=True)
-    phone2 = models.CharField(primary_key=False)
-    phone2 = models.CharField(primary_key=False)
+    phone1 = models.CharField(primary_key=True, max_length=15)
+    phone2 = models.CharField(primary_key=False, max_length=15)
+    phone2 = models.CharField(primary_key=False, max_length=15)
     
 
 
@@ -43,7 +43,7 @@ class OpeningHour(models.Model):
     
 class Place(models.Model):
     name = models.CharField(max_length=100)
-    phone = models.ForeignKey(Phone, unique=True, on_delete=models.CASCADE)
+    phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
     description = models.TextField(max_length=800)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
@@ -58,14 +58,14 @@ class Image(models.Model):
 
 class Review(models.Model):
     review = models.TextField(max_length=1000)
-    reviewer = models.ForeignKey(User)
-    reviewer = models.ForeignKey(Place)
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(Place, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
 
 
 class Rate(models.Model):
-    rate = models.IntegerField(max_length=5)
-    ratedTo = models.ForeignKey(Place)
+    rate = models.IntegerField()
+    ratedTo = models.ForeignKey(Place, on_delete=models.CASCADE)
 
 
 
