@@ -1,6 +1,7 @@
 from django.db import models
 from user.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -66,6 +67,7 @@ class Review(models.Model):
 class Rate(models.Model):
     rate = models.IntegerField()
     ratedTo = models.ForeignKey(Place, on_delete=models.CASCADE)
+    stars = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
 
 
 
