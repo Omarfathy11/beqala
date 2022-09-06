@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import mixins
 from .serializers import GovernorateSerializer, CitySerializer, AddressSerializer, PhoneSerializer, SocialSerializer, OpeningHourSerializer, PlaceSerializer, ImageSerializer, RateSerializer, ReviewSerializer, ResturantSerializer, MedicalClinicSerializer, MedicalClinicSerializer, GroceryStoreSerializer
 from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate, Address, Phone, Social, OpeningHour, Image, Review
+from rest_framework.viewsets import ModelViewSet
 
 
 # Create your views here.
