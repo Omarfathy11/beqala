@@ -9,6 +9,7 @@ class Governorate(models.Model):
     name = models.CharField(max_length=30)
     zipCode = models.IntegerField()
 
+
 class City(models.Model):
     name = models.CharField(max_length=30)
     governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE)
@@ -47,6 +48,7 @@ class Place(models.Model):
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
     cover = models.ImageField()
+
     
     def __str__(self):
         return self.name
