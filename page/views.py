@@ -20,3 +20,34 @@ class PlaceModelViewSet(ModelViewSet):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
             self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
+
+class RestaurantModelViewSet(ModelViewSet):
+    queryset = Resturant.objects.all()
+    serializer_class = ResturantSerializer
+    permission_classes = []
+
+    def get_permissions(self):
+        if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
+            self.permission_classes =[IsAuthenticated]
+        return super().get_permissions()
+
+
+class MedicalClinicModelViewSet(ModelViewSet):
+    queryset = MedicalClinic.objects.all()
+    serializer_class = MedicalClinicSerializer
+    permission_classes = []
+
+    def get_permissions(self):
+        if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
+            self.permission_classes =[IsAuthenticated]
+        return super().get_permissions()
+
+class GroceryStoreModelViewSet(ModelViewSet):
+    queryset = GroceryStore.objects.all()
+    serializer_class = GroceryStoreSerializer
+    permission_classes = []
+
+    def get_permissions(self):
+        if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
+            self.permission_classes =[IsAuthenticated]
+        return super().get_permissions()
