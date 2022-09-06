@@ -7,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 class Governorate(models.Model):
     name = models.CharField(max_length=30)
     zipCode = models.IntegerField()
+    slug = models.SlugField()
 
 class City(models.Model):
     name = models.CharField(max_length=30)
@@ -19,12 +20,10 @@ class Address(models.Model):
 
 
 
-
 class Phone(models.Model):
     phone1 = models.CharField(primary_key=True, max_length=15)
     phone2 = models.CharField(primary_key=False, max_length=15)
     phone2 = models.CharField(primary_key=False, max_length=15)
-    
 
 
 class Social(models.Model):
@@ -39,7 +38,6 @@ class OpeningHour(models.Model):
     fromDay = models.CharField(max_length=10)
     toDay = models.CharField(max_length=10)
 
-
     
 class Place(models.Model):
     name = models.CharField(max_length=100)
@@ -49,12 +47,16 @@ class Place(models.Model):
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
     cover = models.ImageField()
+    slug = models.SlugField()
     
+    def __str__(self):
+        return self.name
+
    
 class Image(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     Image = models.ImageField()
-
+    
 
 class Review(models.Model):
     review = models.TextField(max_length=1000)
@@ -80,6 +82,7 @@ class MedicalClinic(Place):
     products = models.TextField(max_length=200)
     #languageSpoken = models.CharField(max_length=30)
     brands = models.CharField(max_length=40)
+    
     #specialties = models.TextField(max_length=100)
 
 
