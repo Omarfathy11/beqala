@@ -8,7 +8,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Governorate(models.Model):
     name = models.CharField(max_length=30)
     zipCode = models.IntegerField()
-    slug = models.SlugField()
 
 class City(models.Model):
     name = models.CharField(max_length=30)
@@ -48,7 +47,6 @@ class Place(models.Model):
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
     cover = models.ImageField()
-    slug = models.SlugField()
     
     def __str__(self):
         return self.name
