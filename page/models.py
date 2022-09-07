@@ -48,6 +48,7 @@ class Place(models.Model):
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
     cover = models.ImageField()
+    category = models.CharField(max_length=50)
     #slug = models.SlugField(max_length=100, null=True)
     
     def __str__(self):
