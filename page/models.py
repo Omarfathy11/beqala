@@ -11,7 +11,7 @@ class Governorate(models.Model):
 
 
 class City(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30, null=True)
     governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE)
 
 class Address(models.Model):
@@ -39,7 +39,8 @@ class OpeningHour(models.Model):
     fromDay = models.CharField(max_length=10)
     toDay = models.CharField(max_length=10)
 
-    
+place = [('Restaurant', 'Restaurant'), ('Cafe', 'Cafe'), ('MedicalClinic', 'Medical Clinic'), ('CarRepair', 'Car Repair'), ('GroceryStore', 'Grocery store')]
+ 
 class Place(models.Model):
     name = models.CharField(max_length=100)
     phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
