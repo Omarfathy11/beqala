@@ -16,9 +16,8 @@ import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 from dotenv import load_dotenv
-import environ
 load_dotenv('.env')
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 import dj_database_url
 
@@ -83,30 +82,16 @@ WSGI_APPLICATION = 'beqala.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-DB_USERNAME=os.environ.get("DB_USERNAME")
-DB_PASSWORD=os.environ.get("DB_PASSWORD")
-DB_HOST=os.environ.get("DB_HOST")
-DB_PORT=os.environ.get("DB_PORT")
-DB_DATABASE=os.environ.get("DB_DATABASE")
-DB_IS_AVAIL = all([
-        DB_USERNAME, 
-        DB_PASSWORD, 
-        DB_HOST,
-        DB_PORT,
-        DB_DATABASE
-])
-
-if DB_IS_AVAIL:
-    DATABASES = {
-        'default' :{
-            'ENGINE': 'django.db.backends.postgresql',
-            "NAME": DB_DATABASE,
-            "USER": DB_USERNAME,
-            "PASSWORD": DB_PASSWORD,
-            "HOST": DB_HOST,
-            "PORT": DB_PORT,
-        }
-=======
+DATABASES = {
+    'default' :{
+        'ENGINE': 'django.db.backends.postgresql',
+        "NAME": os.environ.get("DB_DATABASE"),
+        "USER": os.environ.get("DB_USERNAME"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),
+        "HOST": os.environ.get("DB_HOST"),
+        "PORT": os.environ.get("DB_PORT"),
+    }
+}
 
 
 
