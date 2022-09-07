@@ -1,9 +1,7 @@
 from django.db import models
+from django import forms
+# Create your models here.
 from django.contrib.auth.models import User
-
-class User(User):
-    pass
+from django.contrib.auth.hashers import make_password
 
 
-class PlaceOwner(User):
-    pass

@@ -9,13 +9,14 @@ from .serializers import GovernorateSerializer, CitySerializer, AddressSerialize
 from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate, Address, Phone, Social, OpeningHour, Image, Review
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 
 # Create your views here.
 
 class PlaceModelViewSet(ModelViewSet):
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_permissions(self):
@@ -26,7 +27,8 @@ class PlaceModelViewSet(ModelViewSet):
 class RestaurantModelViewSet(ModelViewSet):
     queryset = Resturant.objects.all()
     serializer_class = ResturantSerializer
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
@@ -37,7 +39,8 @@ class RestaurantModelViewSet(ModelViewSet):
 class MedicalClinicModelViewSet(ModelViewSet):
     queryset = MedicalClinic.objects.all()
     serializer_class = MedicalClinicSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
@@ -47,7 +50,8 @@ class MedicalClinicModelViewSet(ModelViewSet):
 class GroceryStoreModelViewSet(ModelViewSet):
     queryset = GroceryStore.objects.all()
     serializer_class = GroceryStoreSerializer
-    permission_classes = []
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
