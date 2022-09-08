@@ -20,6 +20,11 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
 class PhoneSerializer(serializers.ModelSerializer):
+    phone = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field='phone'
+    )
     class Meta:
         model = Phone
         fields = '__all__'
@@ -35,6 +40,13 @@ class OpeningHourSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlaceSerializer(serializers.ModelSerializer):
+    phone= serializers.SlugRelatedField(
+        queryset=Phone.objects.all(),
+        slug_field='Phone')
+    #phone = PhoneSerializer(many=True)
+    #address = AddressSerializer(many=True)
+    #openingHours = OpeningHourSerializer(many=True)
+    #social = SocialSerializer(many=True)
     class Meta:
         model = Place
         fields = '__all__'
@@ -57,6 +69,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
       
 class ResturantSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Resturant
         fields = '__all__'
@@ -87,5 +100,5 @@ class AddPlaceSerializer(serializers.ModelSerializer):
 
         place = Place()
         place.save()
-        
+
         return place

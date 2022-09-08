@@ -32,8 +32,8 @@ class RestaurantModelViewSet(ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filterset_class = Resturant
-    filterset_fields = ['name', 'description']
+    #filterset_class = Resturant()
+    filterset_fields = ['name']
 
 
     def get_permissions(self):
@@ -48,8 +48,8 @@ class MedicalClinicModelViewSet(ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filterset_class = MedicalClinic
-    filterset_fields = ['name', 'description']
+    #filterset_class = MedicalClinic()
+    filterset_fields = ['name']
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':

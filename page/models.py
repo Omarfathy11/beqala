@@ -48,7 +48,7 @@ class Place(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
-    cover = models.ImageField()
+    cover = models.ImageField(null=True)
 
     
     def __str__(self):
@@ -77,7 +77,7 @@ class Rate(models.Model):
 class Resturant(Place):
     dishes = models.CharField(max_length=100)
     atmosphere = models.CharField(max_length=30)
-    
+
    # languageSpoken = models.CharField(max_length=30)
    # features = models.CharField(max_length=100)
 
