@@ -9,7 +9,9 @@ from .serializers import GovernorateSerializer, CitySerializer, AddressSerialize
 from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate, Address, Phone, Social, OpeningHour, Image, Review
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication, SessionAuthentication
+import django_filters.rest_framework
+
 
 # Create your views here.
 
@@ -27,8 +29,12 @@ class PlaceModelViewSet(ModelViewSet):
 class RestaurantModelViewSet(ModelViewSet):
     queryset = Resturant.objects.all()
     serializer_class = ResturantSerializer
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_class = Resturant
+    filterset_fields = ['name', 'description']
+
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
@@ -41,6 +47,9 @@ class MedicalClinicModelViewSet(ModelViewSet):
     serializer_class = MedicalClinicSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_class = MedicalClinic
+    filterset_fields = ['name', 'description']
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
@@ -52,6 +61,7 @@ class GroceryStoreModelViewSet(ModelViewSet):
     serializer_class = GroceryStoreSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':

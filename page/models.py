@@ -77,6 +77,7 @@ class Rate(models.Model):
 class Resturant(Place):
     dishes = models.CharField(max_length=100)
     atmosphere = models.CharField(max_length=30)
+    
    # languageSpoken = models.CharField(max_length=30)
    # features = models.CharField(max_length=100)
 

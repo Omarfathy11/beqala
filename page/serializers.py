@@ -77,3 +77,15 @@ class GroceryStoreSerializer(serializers.ModelSerializer):
         model = GroceryStore
         fields = '__all__'
 
+
+class AddPlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+         model = Place
+         fields = '__all__'
+
+    def create(self, validated_data):
+
+        place = Place()
+        place.save()
+        
+        return place
