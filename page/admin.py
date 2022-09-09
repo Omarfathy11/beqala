@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Place, Resturant, MedicalClinic, CarRepair, GroceryStore, Governorate, City, Address, Phone, Social, Image, OpeningHour
+from .models import Place, Resturant, MedicalClinic, CarRepair, GroceryStore, Governorate, City, Address, Phone, Social, OpeningHour
 
 ''', Cafe, Hotel, Backers, ATM, Gym, PlayGrounds'''
 
@@ -11,8 +11,8 @@ class ResturantAdmin(admin.ModelAdmin):
     search_fields = ['dishes', 'atmosphere']
 
 class PlaceAdmin(admin.ModelAdmin):
-     list_display = ['id', 'name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover',]
-     list_filter = ['name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover']
+     list_display = ['id', 'Place_Name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover',]
+     list_filter = ['Place_Name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover']
      search_fields = ['name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover']
 
 admin.site.register(Place, PlaceAdmin)
@@ -25,5 +25,5 @@ admin.site.register(City)
 admin.site.register(OpeningHour)
 admin.site.register(Address)
 admin.site.register(Social)
-admin.site.register(Image)
+#admin.site.register(Image)
 admin.site.register(Governorate)
