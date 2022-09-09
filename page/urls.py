@@ -4,10 +4,11 @@ from rest_framework.routers import DefaultRouter
 
 
 route = DefaultRouter()
-
+route.register(r'places', views.PlaceModelViewSet)
 route.register(r'restaurants', views.RestaurantModelViewSet)
 route.register(r'groceries', views.RestaurantModelViewSet)
 route.register(r'medical-clinics', views.RestaurantModelViewSet)
+#route.register(r'carrepair', views.)
 
 urlpatterns = [
     path('', include(route.urls)),

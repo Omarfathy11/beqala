@@ -10,5 +10,5 @@ route.register(r'user', viewsets_user)
 urlpatterns = [
 path('', include(route.urls)) ,   
 path('token/',views.obtain_auth_token),
-path('', viewsets_user)
+#path('', viewsets_user),
 ]
