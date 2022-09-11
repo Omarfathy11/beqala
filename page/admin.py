@@ -11,8 +11,8 @@ class ResturantAdmin(admin.ModelAdmin):
     search_fields = ['dishes', 'atmosphere']
 
 class PlaceAdmin(admin.ModelAdmin):
-     list_display = ['id', 'Place_Name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover',]
-     list_filter = ['Place_Name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover']
+     list_display = ['id', 'Place_Name', 'phone', 'description', 'address', 'openingHours', 'social',]
+     list_filter = ['Place_Name', 'phone', 'description', 'address', 'openingHours', 'social',]
      search_fields = ['name', 'phone', 'description', 'address', 'openingHours', 'social', 'cover']
 
 admin.site.register(Place, PlaceAdmin)
