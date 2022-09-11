@@ -42,6 +42,11 @@ class OpeningHour(models.Model):
 #CATEGORISED
 # place = [('Restaurant', 'Restaurant'), ('Cafe', 'Cafe'), ('MedicalClinic', 'Medical Clinic'), ('CarRepair', 'Car Repair'), ('GroceryStore', 'Grocery store')]
  
+class Image(models.Model):
+    cover = models.ImageField()
+    photosCollection = ArrayField(models.ImageField(blank=True, upload_to="media"), size=10)
+    
+
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100)
     phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
@@ -49,31 +54,13 @@ class Place(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
-    cover = models.ImageField(null=True)
-    photosCollection = ArrayField(
-        ArrayField(
-            models.ImageField(blank=True),
-            size=10,
-        ),null=True,
-        size=10,
-        )
-
+    photo = models.ForeignKey(Image, on_delete=models.CASCADE, related_name='collection')
+    
     
     def __str__(self):
         return self.name
 
-'''   
-class Image(models.Model):
-    place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    Image = ArrayField(
-        ArrayField(
-            models.ImageField(blank=True),
-            size=10,
-        ),
-        size=10,
-        )
-    
-'''    
+
 
 class Review(models.Model):
     review = models.TextField(max_length=1000, null=True)

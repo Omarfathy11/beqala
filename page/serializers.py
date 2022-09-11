@@ -1,6 +1,6 @@
 from dataclasses import field
 from rest_framework import serializers
-from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant, CarRepair, MedicalClinic, GroceryStore
+from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant, CarRepair, MedicalClinic, GroceryStore, Image
 from .mixins import NestedCreateMixin, NestedUpdateMixin
 
 
@@ -8,41 +8,27 @@ class GovernorateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Governorate
-        fields = '__all__'
+        fields = ['Governorate_Name', 'zipCode']
 
 class CitySerializer(serializers.ModelSerializer):
 
-    governorate = GovernorateSerializer(many=True)
+    governorate = GovernorateSerializer()
 
-    def create(self, validated_data):
-        governorates_data = validated_data.pop('governorate')
-        city = City.objects.create(**validated_data)
-
-        for governorate in governorates_data:
-            governorate, created = Governorate.objects.get_or_create(name=address['name'])
-            City.governorate.add(governorate)
-            return city
-
+    
     class Meta:
         model = City
-        fields = '__all__'
+        fields = ['City_name', 'governorate']
     
 class AddressSerializer(serializers.ModelSerializer):
 
-    city = CitySerializer(many=True)
+    city = CitySerializer()
 
-    def create(self, validated_data):
-        cities_data = validated_data.pop('city')
-        address = Address.objects.create(**validated_data)
-
-        for city in cities_data:
-            city, created = City.objects.get_or_create(name=address['name'])
-            city.address.add(city)
-            return address
-
+    
     class Meta:
         model = Address
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['line1', 'line2', 'city']
+        depth = 4
 
 
 
@@ -69,12 +55,13 @@ class PlaceSerializer(serializers.ModelSerializer):
         model = Place
         fields = '__all__'
 
-'''
 class ImageSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = Image
-        fields = '__all__'
-'''
+        #fields = '__all__'
+        fields = ['cover', 'photosCollection']
 
 class RateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -93,22 +80,15 @@ class ResturantSerializer(NestedCreateMixin, NestedUpdateMixin, serializers.Mode
     openingHours = OpeningHourSerializer()
     social = SocialSerializer()
 
-    address = AddressSerializer(many=True)
-    
-    
-    
-    def create(self, validated_data):
-        addresses_data = validated_data.pop('address')
-        restaurant = Resturant.objects.create(**validated_data)
+    image = ImageSerializer()
 
-        for address in addresses_data:
-            address, created = Address.objects.get_or_create(name=address['name'])
-            restaurant.address.add(address)
-            return restaurant
-
+    address = AddressSerializer()
+    
     class Meta:
         model = Resturant
-        fields = '__all__'
+        #fields = '__all__'
+        fields = ['Place_Name', 'description', 'openingHours', 'social', 'address', 'phone', 'image']
+        depth = 4
 
 
     
@@ -123,6 +103,7 @@ class MedicalClinicSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalClinic
         fields = '__all__'
+        depth = 4
 
 class CarRepairSerializer(serializers.ModelSerializer):
     phone = serializers.CharField()
@@ -131,9 +112,11 @@ class CarRepairSerializer(serializers.ModelSerializer):
     address = AddressSerializer()
     city = CitySerializer()
     governorate = GovernorateSerializer()
+    
     class Meta:
         model = CarRepair
         fields = '__all__'
+        depth = 4
 
 class GroceryStoreSerializer(serializers.ModelSerializer):
     phone = PhoneSerializer()
@@ -145,5 +128,6 @@ class GroceryStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroceryStore
         fields = '__all__'
+        depth = 4
 
 
