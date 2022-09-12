@@ -12,23 +12,22 @@ class Governorate(models.Model):
 
 class City(models.Model):
     City_name = models.CharField(max_length=30, null=True)
-    governorate = models.ForeignKey(Governorate, on_delete=models.CASCADE, null=True)
+    governorate = models.ForeignKey(Governorate, on_delete=models.SET_NULL, null=True)
 
 class Address(models.Model):
     line1 = models.CharField(max_length=50)
     line2 = models.CharField(max_length=30, null=True)
-    city = models.ForeignKey(City, on_delete=models.CASCADE, null=True)
+    city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
 
 
 
 class Phone(models.Model):
-    phone1 = models.CharField(primary_key=True, max_length=15, null=False)
-    phone2 = models.CharField(primary_key=False, max_length=15, null=True)
-    phone3 = models.CharField(primary_key=False, max_length=15, null=True)
+    place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
+    phone = models.CharField(max_length=15, null=False)
 
 
 class Social(models.Model):
-    facebook = models.CharField(max_length=100)
+    facebook = models.CharField(max_length=100, null=True)
     instagram = models.CharField(max_length=100, null=True)
     twitter = models.CharField(max_length=100, null=True)
     website = models.CharField(max_length=100, null=True)
@@ -39,43 +38,34 @@ class OpeningHour(models.Model):
     from_Day = models.CharField(max_length=10)
     to_Day = models.CharField(max_length=10)
 
- 
-class ImageCollection(models.Model):
-    place_collection = models.ImageField(null=True)
     
 
-class Image(models.Model):
-    cover = models.ImageField(null=True, verbose_name='image')
-    collection = models.ForeignKey(ImageCollection, on_delete=models.CASCADE, null=True)
-    
-    
+class ImageCollection(models.Model):
+    place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
+    image = models.ImageField(null=False, verbose_name='image')
+    is_default = models.BooleanField(default=False)
+
 
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100, null=False)
-    phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
     description = models.TextField(max_length=800, null=True)
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
-    openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
-    social = models.ForeignKey(Social, on_delete=models.CASCADE)
-    photo = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
-    
-    
-    def __str__(self):
-        return self.name
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
+    openingHours = models.ForeignKey(OpeningHour, on_delete=models.SET_NULL, null=True)
+    social = models.ForeignKey(Social, on_delete=models.SET_NULL, null=True)
 
    
 
 class Review(models.Model):
     review = models.TextField(max_length=1000, null=True)
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    reviewer = models.ForeignKey(Place, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
 
 
 class Rate(models.Model):
     rate = models.IntegerField()
-    ratedTo = models.ForeignKey(Place, on_delete=models.CASCADE)
-    stars = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
+    stars = models.IntegerField()
 
 
 

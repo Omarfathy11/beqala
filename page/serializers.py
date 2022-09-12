@@ -1,128 +1,117 @@
 from dataclasses import field
 from rest_framework import serializers
-from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant, CarRepair, MedicalClinic, GroceryStore, Image, ImageCollection
+from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant, CarRepair, MedicalClinic, GroceryStore, ImageCollection
 from drf_writable_nested import WritableNestedModelSerializer
 
 
-class PhoneSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class PhoneSerializer(serializers.ModelSerializer):
    
     class Meta:
         model = Phone
         fields = '__all__'
+    
+    def create(self, validated_data):
+        print('Create')
+        return super().create(validated_data)
 
-class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class SocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Social
         fields = '__all__'
 
-class OpeningHourSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class OpeningHourSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpeningHour
         fields = '__all__'
 
-class RateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = Rate
-        fields = '__all__'
+# class RateSerializer(WritableNestedModelSerializer):
+#     class Meta:
+#         model = Rate
+#         fields = '__all__'
 
 
-class ReviewSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    class Meta:
-        model = Review
-        fields = '__all__'
+# class ReviewSerializer(WritableNestedModelSerializer):
+#     class Meta:
+#         model = Review
+#         fields = '__all__'
 
 
-class GovernorateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class GovernorateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Governorate
-        fields = ['Governorate_Name', 'zipCode']
+        fields = '__all__'
 
-class CitySerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class CitySerializer(WritableNestedModelSerializer):
 
     governorate = GovernorateSerializer()
 
-    
     class Meta:
         model = City
-        fields = ['City_name', 'governorate']
+        fields = '__all__'
     
-class AddressSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class AddressSerializer(WritableNestedModelSerializer):
 
     city = CitySerializer()
 
     
     class Meta:
         model = Address
-        fields = ['line1', 'line2', 'city']
-        depth = 4
+        fields = '__all__'
 
 
-class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class ImageCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageCollection
-        fields = ['place_collection']
-
-class ImageSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-
-    collection = ImageCollectionSerializer()
-
-    class Meta:
-        model = Image
-        fields = ['cover', 'collection']
+        fields = '__all__'
 
 
 
-class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
 
-    phone = PhoneSerializer()
+    address = AddressSerializer()
     openingHours = OpeningHourSerializer()
     social = SocialSerializer()
 
-    image = ImageSerializer()
-    address = AddressSerializer()
-
-    class Meta:
-        model = Place
-        fields = ['Place_Name', 'description', 'address', 'openingHours', 'phone', 'image','social']
-
+    phone = PhoneSerializer(source='phone_set')
+    image = ImageCollectionSerializer(source='imagecollection_set', allow_null=True, read_only=True)
 
 
       
 class ResturantSerializer(PlaceSerializer):
 
-    place = PlaceSerializer()
-    
+    def create(self, validated_data):
+        return super().create(validated_data)
+
     class Meta:
         model = Resturant
-        fields = ['place', 'dishes', 'atmosphere']
-        depth = 4
+        fields = '__all__'
 
 
     
-class MedicalClinicSerializer(PlaceSerializer):
-    place = PlaceSerializer()
+# class MedicalClinicSerializer(PlaceSerializer):
+#     place = PlaceSerializer()
 
 
-    class Meta:
-        model = MedicalClinic
-        fields = ['place', 'products', 'brands']
-        depth = 4
+#     class Meta:
+#         model = MedicalClinic
+#         fields = ['place', 'products', 'brands']
+#         depth = 4
 
-class CarRepairSerializer(PlaceSerializer):
-    place = PlaceSerializer()
+# class CarRepairSerializer(PlaceSerializer):
+#     place = PlaceSerializer()
     
-    class Meta:
-        model = CarRepair
-        fields = ['place', 'products', 'brands']
-        depth = 4
+#     class Meta:
+#         model = CarRepair
+#         fields = ['place', 'products', 'brands']
+#         depth = 4
 
-class GroceryStoreSerializer(PlaceSerializer):
-    place = PlaceSerializer()
+# class GroceryStoreSerializer(PlaceSerializer):
+#     place = PlaceSerializer()
 
-    class Meta:
-        model = GroceryStore
-        fields = ['place', 'products', 'brands']
-        depth = 4
+#     class Meta:
+#         model = GroceryStore
+#         fields = ['place', 'products', 'brands']
+#         depth = 4
 
 
