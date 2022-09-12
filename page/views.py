@@ -12,6 +12,8 @@ from rest_framework.authentication import BasicAuthentication, TokenAuthenticati
 import django_filters.rest_framework
 import django_filters
 from collections import namedtuple
+from rest_framework.parsers import JSONParser
+
 
 
 
@@ -24,6 +26,8 @@ class PlaceModelViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = ['Place_Name']
+    parser_classes = [JSONParser]
+
 
     def get_permissions(self):
         if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
@@ -38,6 +42,8 @@ class RestaurantModelViewSet(ModelViewSet):
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     #filterset_class = Resturant()
     filterset_fields = ['Place_Name']
+    parser_classes = [JSONParser]
+
     #pagination_class = LargeResultsSetPagination
 
     def get_permissions(self):

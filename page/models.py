@@ -34,25 +34,24 @@ class Social(models.Model):
     website = models.CharField(max_length=100, null=True)
 
 class OpeningHour(models.Model):
-    open_from = models.TimeField()
-    open_to = models.TimeField()
+    open_from = models.TimeField(auto_now_add=True)
+    open_to = models.TimeField(auto_now_add=True)
     from_Day = models.CharField(max_length=10)
     to_Day = models.CharField(max_length=10)
 
-#CATEGORISED
-# place = [('Restaurant', 'Restaurant'), ('Cafe', 'Cafe'), ('MedicalClinic', 'Medical Clinic'), ('CarRepair', 'Car Repair'), ('GroceryStore', 'Grocery store')]
  
 class ImageCollection(models.Model):
     place_collection = models.ImageField(null=True)
     
 
 class Image(models.Model):
-    cover = models.ImageField(null=True)
+    cover = models.ImageField(null=True, verbose_name='image')
     collection = models.ForeignKey(ImageCollection, on_delete=models.CASCADE, null=True)
+    
     
 
 class Place(models.Model):
-    Place_Name = models.CharField(max_length=100)
+    Place_Name = models.CharField(max_length=100, null=False)
     phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
     description = models.TextField(max_length=800, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
@@ -64,7 +63,7 @@ class Place(models.Model):
     def __str__(self):
         return self.name
 
-
+   
 
 class Review(models.Model):
     review = models.TextField(max_length=1000, null=True)
