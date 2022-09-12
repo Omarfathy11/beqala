@@ -84,7 +84,7 @@ class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer
 
     class Meta:
         model = Place
-        fields = ['Place_Name', 'description', 'address', 'openingHours', 'phone', 'image', 'social']
+        fields = ['Place_Name', 'description', 'address', 'openingHours', 'phone', 'image','social']
 
 
 
