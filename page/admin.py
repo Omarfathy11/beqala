@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Place, Resturant, MedicalClinic, CarRepair, GroceryStore, Governorate, City, Address, Phone, Social, OpeningHour
+from .models import Place, Resturant, MedicalClinic, CarRepair, GroceryStore, Governorate, City, Address, Phone, Social, OpeningHour, Image, ImageCollection
 
 ''', Cafe, Hotel, Backers, ATM, Gym, PlayGrounds'''
 
@@ -25,5 +25,6 @@ admin.site.register(City)
 admin.site.register(OpeningHour)
 admin.site.register(Address)
 admin.site.register(Social)
-#admin.site.register(Image)
+admin.site.register(Image)
+admin.site.register(ImageCollection)
 admin.site.register(Governorate)

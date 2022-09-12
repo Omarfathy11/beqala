@@ -42,19 +42,23 @@ class OpeningHour(models.Model):
 #CATEGORISED
 # place = [('Restaurant', 'Restaurant'), ('Cafe', 'Cafe'), ('MedicalClinic', 'Medical Clinic'), ('CarRepair', 'Car Repair'), ('GroceryStore', 'Grocery store')]
  
+class ImageCollection(models.Model):
+    place_collection = models.ImageField(null=True)
+    
+
 class Image(models.Model):
-    cover = models.ImageField()
-    photosCollection = ArrayField(models.ImageField(blank=True, upload_to="media"), size=10)
+    cover = models.ImageField(null=True)
+    collection = models.ForeignKey(ImageCollection, on_delete=models.CASCADE, null=True)
     
 
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100)
     phone = models.ForeignKey(Phone, on_delete=models.CASCADE)
-    description = models.TextField(max_length=800)
+    description = models.TextField(max_length=800, null=True)
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.CASCADE)
     social = models.ForeignKey(Social, on_delete=models.CASCADE)
-    photo = models.ForeignKey(Image, on_delete=models.CASCADE, related_name='collection')
+    photo = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
     
     
     def __str__(self):
@@ -104,7 +108,6 @@ class GroceryStore(Place):
      brands = models.CharField(max_length=40)
      #languageSpoken = models.CharField(max_length=30)
 
-'''
 class Cafe(Place):
     pass
 
@@ -123,4 +126,3 @@ class Gym(Place):
 class PlayGrounds(Place):
     pass
 
-'''
