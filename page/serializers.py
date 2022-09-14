@@ -67,9 +67,9 @@ class ImageCollectionSerializer(serializers.ModelSerializer):
 
 
 
-class PlaceSerializer(serializers.ModelSerializer):
-
-    address = AddressSerializer()
+class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+      
+    phone = PhoneSerializer()
     openingHours = OpeningHourSerializer()
     social = SocialSerializer()
 
@@ -85,7 +85,8 @@ class ResturantSerializer(PlaceSerializer):
 
     class Meta:
         model = Resturant
-        fields = '__all__'
+        fields = ['dishes', 'atmosphere']
+        depth = 4
 
 
     
