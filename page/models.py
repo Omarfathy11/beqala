@@ -42,10 +42,10 @@ class OpeningHour(models.Model):
 
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
-    image = models.ImageField(null=False, verbose_name='image')
+    image = models.ImageField(null=True)
     is_default = models.BooleanField(default=False)
 
-
+    
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100, null=False)
     description = models.TextField(max_length=800, null=True)
@@ -53,26 +53,11 @@ class Place(models.Model):
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.SET_NULL, null=True)
     social = models.ForeignKey(Social, on_delete=models.SET_NULL, null=True)
 
-   
-
-class Review(models.Model):
-    review = models.TextField(max_length=1000, null=True)
-    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
-    date = models.DateTimeField(auto_now_add=True)
-
-
-class Rate(models.Model):
-    rate = models.IntegerField()
-    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
-    stars = models.IntegerField()
-
-
+    
 
 class Resturant(Place):
     dishes = models.CharField(max_length=100, null=True)
     atmosphere = models.CharField(max_length=30, null=True)
-
    # languageSpoken = models.CharField(max_length=30)
    # features = models.CharField(max_length=100)
 
@@ -97,6 +82,21 @@ class GroceryStore(Place):
      brands = models.CharField(max_length=40)
      #languageSpoken = models.CharField(max_length=30)
 
+     
+class Review(models.Model):
+    review = models.TextField(max_length=1000, null=True)
+    reviewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+
+
+class Rate(models.Model):
+    rate = models.IntegerField()
+    place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
+    stars = models.IntegerField()
+
+
+
 class Cafe(Place):
     pass
 
@@ -114,4 +114,7 @@ class Gym(Place):
 
 class PlayGrounds(Place):
     pass
+
+
+
 
