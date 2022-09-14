@@ -166,7 +166,7 @@ class MedicalClinicSerializer(PlaceSerializer):
 
     phone = PhoneSerializer()
 
-    # social = SocialSerializer()
+    social = SocialSerializer()
 
     class Meta:
         model = MedicalClinic
@@ -184,6 +184,8 @@ class MedicalClinicSerializer(PlaceSerializer):
         openingHours_data = validated_data.pop('openingHours')
 
         phone_data = validated_data.pop('phone')
+
+        social_data = validated_data.pop('social')
         
         medicalClinic = MedicalClinic.objects.create(
             address=Address.objects.create(
@@ -199,6 +201,8 @@ class MedicalClinicSerializer(PlaceSerializer):
 
             phone = Phone.objects.create(**phone_data),
 
+            social = Social.objects.create(**social_data),
+
             **validated_data,
         )
         
@@ -213,7 +217,7 @@ class CarRepairSerializer(PlaceSerializer):
 
     phone = PhoneSerializer()
 
-    # social = SocialSerializer()
+    social = SocialSerializer()
 
     class Meta:
         model = CarRepair
@@ -230,6 +234,8 @@ class CarRepairSerializer(PlaceSerializer):
         openingHours_data = validated_data.pop('openingHours')
 
         phone_data = validated_data.pop('phone')
+
+        social_data = validated_data.pop('social')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(
@@ -245,6 +251,8 @@ class CarRepairSerializer(PlaceSerializer):
 
             phone = Phone.objects.create(**phone_data),
 
+            social = Social.objects.create(**social_data),
+
             **validated_data,
         )
         return carRepair
@@ -258,7 +266,7 @@ class GroceryStoreSerializer(PlaceSerializer):
 
     phone = PhoneSerializer()
 
-    # social = SocialSerializer()
+    social = SocialSerializer()
 
     class Meta:
         model = GroceryStore
@@ -278,6 +286,8 @@ class GroceryStoreSerializer(PlaceSerializer):
 
         phone_data = validated_data.pop('phone')
         
+        social_data = validated_data.pop('social')
+        
         groceryStore = GroceryStore.objects.create(
             address=Address.objects.create(
                 city=City.objects.create(
@@ -290,6 +300,7 @@ class GroceryStoreSerializer(PlaceSerializer):
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
             phone = Phone.objects.create(**phone_data),
+            social = Social.objects.create(**social_data),
             **validated_data,
         )
 
