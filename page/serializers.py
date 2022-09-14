@@ -1,25 +1,35 @@
 from dataclasses import field
 from rest_framework import serializers
 
-from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant
-from .models import CarRepair, ImageCollection
+from .models import Governorate, City, Address, Phone, Social, OpeningHour, Place, Rate, Review, Resturant, CarRepair, ImageCollection
 from .models import MedicalClinic, GroceryStore, ImageCollection
 
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
+from rest_meets_djongo.serializers import DjongoModelSerializer
+
+
+
+class PhoneSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = Phone
+        fields = '__all__'
+    
+
+class SocialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Social
+        fields = '__all__'
 
 class OpeningHourSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = OpeningHour
         fields = '__all__'
-
-    def create(self, validated_data):
-        openingHours = OpeningHour.objects.create(
-            **validated_data
-        )
-        return openingHours
 
 
 class GovernorateSerializer(serializers.ModelSerializer):
@@ -28,92 +38,75 @@ class GovernorateSerializer(serializers.ModelSerializer):
         model = Governorate
         fields = '__all__'
 
-
 class CitySerializer(serializers.ModelSerializer):
 
     governorate = GovernorateSerializer()
 
-    def create(self, validated_data):
-        governorate_data = validated_data.pop('governorate')
-        city = City.objects.create(
-            governorate=Governorate.objects.create(
-                **governorate_data
-            )
-            ** validated_data,
-        )
-        return city
+
+    # def create(self, validated_data):
+    #     address_data = validated_data.pop('governorate')
+    #     Resturant.objects.create(
+    #         **validated_data
+    #     )
+    #     print(validated_data)
+    #     return City
 
     class Meta:
         model = City
         fields = '__all__'
-
-
+    
 class AddressSerializer(serializers.ModelSerializer):
-
-    city = CitySerializer()
 
     class Meta:
         model = Address
         fields = '__all__'
 
+    city = CitySerializer()
+
+
+    '''
     def create(self, validated_data):
-        city_data = validated_data.pop('city')
-        governorate_data = city_data.pop('governorate')
-        address = Address.objects.create(
-            city=City.objects.create(
-                governorate=Governorate.objects.create(
-                    **governorate_data
-                )
-                ** city_data
-            ),
+        address_data = validated_data.pop('city')
+        Resturant.objects.create(
             **validated_data
         )
-        return address
-
-
-class PlaceSerializer(serializers.ModelSerializer):
-    pass
-
-
-class SocialSerializer(serializers.ModelSerializer):
-    place = PlaceSerializer(source='place_set')
-
-    def create(self, validated_data):
-        place_data = validated_data.pop('place_set')
-        place_data = Place.objects.create(
-            place=place,
-            **social_data
-        )
-        return place
-
-    class Meta:
-        model = Social
-        fields = '__all__'
+        return Address
+    '''
 
 
 class ImageCollectionSerializer(serializers.ModelSerializer):
-
-    place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
     class Meta:
         model = ImageCollection
         fields = '__all__'
 
+    # def create(self, validated_data):
+    #     place_data = validated_data.pop('place')
+    #     ImageCollection.objects.create(
+    #         **validated_data
+    #     )
+    #     return ImageCollection
+    
 
-class PhoneSerializer(serializers.ModelSerializer):
-
-    place = PlaceSerializer(source='place_set', read_only=True, many=True)
-
-    class Meta:
-        model = Phone
-        fields = '__all__'
 
 
-class ResturantSerializer(PlaceSerializer):
+class PlaceSerializer(serializers.ModelSerializer):
 
-    openingHour = OpeningHourSerializer()
+    #imageCollection = ImageCollectionSerializer(source='imagecollection_set', allow_null=True, read_only=True, many=True, required=False)
+    #phone = PhoneSerializer(source='phone_set', many=True, read_only=True, allow_null=True)
+
     address = AddressSerializer()
-    # social = SocialSerializer()
+
+    openingHours = OpeningHourSerializer()
+
+    social = SocialSerializer()
+    
+    phone = PhoneSerializer(source='phone_set')
+    
+
+
+      
+class ResturantSerializer(PlaceSerializer):
 
     class Meta:
         model = Resturant
@@ -121,176 +114,73 @@ class ResturantSerializer(PlaceSerializer):
 
     def create(self, validated_data):
         address_data = validated_data.pop('address')
+        openingHours_data = validated_data.pop('openingHours')
+        social_data = validated_data.pop('social')
+        phones_data = validated_data.pop('phone')
         
-        city_data = address_data.pop('city')
-        governorate_data = city_data.pop('governorate')
+        for phone_data in phones_data:
+            Resturant.objects.create(phone=phone, **validated_data)
 
-        resturant = Resturant.objects.create(
-            address=Address.objects.create(
-                city=City.objects.create(
-                    governorate=Governorate.objects.create(
-                        **governorate_data
-                    ), 
-                    **city_data
-                ), 
-                **address_data
-            ), 
-            **validated_data,
-        )
+        resturant = Resturant.objects.create(**validated_data)
         
         return resturant
-
-    '''
-    def create(self, validated_data):
-        openingHour_data = validated_data.pop('openingHour')
-        resturant = Resturant.objects.create(openingHour=OpeningHour.objects.create(**openingHour_data)**validated_data)
-
-        return resturant
-    '''
-
-    # social_data = validated_data.pop('social_set')
-    # social_data = Social.objects.create(
-    #     resturant = resturant,
-    #     **social_data
-    # )
-
-
+    
 class MedicalClinicSerializer(PlaceSerializer):
 
     class Meta:
         model = MedicalClinic
         fields = '__all__'
 
-   # openingHour = OpeningHourSerializer()
-    address = AddressSerializer()
-    # social = SocialSerializer()
-
-    class Meta:
-        model = Resturant
-        fields = '__all__'
-
+    '''
     def create(self, validated_data):
-        address_data = validated_data.pop('address')
-        city_data = address_data.pop('city')
-        governorate_data = city_data.pop('governorate')
-        
-        medicalClinic = MedicalClinic.objects.create(
-            address=Address.objects.create(
-                city=City.objects.create(
-                    governorate=Governorate.objects.create(
-                        **governorate_data
-                    ),
-                    **city_data
-                ),
-                **address_data
-            ),
-            **validated_data,
+        address_data = validated_data.pop('Address')
+        openingHours_data = validated_data.pop('openingHours')
+        social_data = validated_data.pop('social')
+        phone_data = validated_data.pop('phone')
+        Resturant.objects.create(
+            **validated_data
         )
-
-        # opening_hours = OpeningHour.objects.create(
-        #     resturant = resturant,
-        #     **openingHour_data
-        # )
-
-        # social_data = Social.objects.create(
-        #     resturant = resturant,
-        #     **social_data
-        # )
-        return medicalClinic
-
+        print(validated_data)
+        return Resturant
+    '''
 
 class CarRepairSerializer(PlaceSerializer):
-
+    
     class Meta:
         model = CarRepair
         fields = '__all__'
-
-    # openingHour = OpeningHourSerializer()
-    address = AddressSerializer()
-    # social = SocialSerializer()
-
-    class Meta:
-        model = Resturant
-        fields = '__all__'
-
+    
+    '''
     def create(self, validated_data):
-        address_data = validated_data.pop('address')
-        city_data = address_data.pop('city')
-        governorate_data = city_data.pop('governorate')
-        # openingHour_data = validated_data.pop('openingHour')
-
-        # social_data = validated_data.pop('social_set')
-
-        carRepair = CarRepair.objects.create(
-            address=Address.objects.create(
-                city=City.objects.create(
-                    governorate=Governorate.objects.create(
-                        **governorate_data
-                    ),
-                    **city_data
-                ),
-                **address_data
-            ),
-            **validated_data,
+        address_data = validated_data.pop('Address')
+        openingHours_data = validated_data.pop('openingHours')
+        social_data = validated_data.pop('social')
+        phone_data = validated_data.pop('phone')
+        Resturant.objects.create(
+            **validated_data
         )
-
-        # opening_hours = OpeningHour.objects.create(
-        #     resturant = resturant,
-        #     **openingHour_data
-        # )
-
-        # social_data = Social.objects.create(
-        #     resturant = resturant,
-        #     **social_data
-        # )
-        return carRepair
-
+        print(validated_data)
+        return Resturant
+    '''
 
 class GroceryStoreSerializer(PlaceSerializer):
 
     class Meta:
         model = GroceryStore
         fields = '__all__'
-
-  # openingHour = OpeningHourSerializer()
-    address = AddressSerializer()
-    # social = SocialSerializer()
-
-    class Meta:
-        model = Resturant
-        fields = '__all__'
-
+    
+    '''
     def create(self, validated_data):
-        address_data = validated_data.pop('address')
-        city_data = address_data.pop('city')
-        governorate_data = city_data.pop('governorate')
-        # openingHour_data = validated_data.pop('openingHour')
-
-        # social_data = validated_data.pop('social_set')
-
-        groceryStore = GroceryStore.objects.create(
-            address=Address.objects.create(
-                city=City.objects.create(
-                    governorate=Governorate.objects.create(
-                        **governorate_data
-                    ),
-                    **city_data
-                ),
-                **address_data
-            ),
-            **validated_data,
+        address_data = validated_data.pop('Address')
+        openingHours_data = validated_data.pop('openingHours')
+        social_data = validated_data.pop('social')
+        phone_data = validated_data.pop('phone')
+        Resturant.objects.create(
+            **validated_data
         )
-
-        # opening_hours = OpeningHour.objects.create(
-        #     resturant = resturant,
-        #     **openingHour_data
-        # )
-
-        # social_data = Social.objects.create(
-        #     resturant = resturant,
-        #     **social_data
-        # )
-        return groceryStore
+        print(validated_data)
+        return Resturant
+    '''
 
 # class RateSerializer(WritableNestedModelSerializer):
 #     class Meta:
@@ -302,3 +192,5 @@ class GroceryStoreSerializer(PlaceSerializer):
 #     class Meta:
 #         model = Review
 #         fields = '__all__'
+
+
