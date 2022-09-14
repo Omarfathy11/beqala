@@ -41,12 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'user',
+    'page',
     'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
-    'user',
-    'page',
-
+    
 ]
 
 REST_FRAMEWORK = {
