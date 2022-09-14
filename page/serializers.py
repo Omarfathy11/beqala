@@ -7,7 +7,6 @@ from .models import MedicalClinic, GroceryStore, ImageCollection
 
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
-from rest_framework import status
 
 
 class OpeningHourSerializer(serializers.ModelSerializer):
@@ -74,15 +73,10 @@ class PlaceSerializer(serializers.ModelSerializer):
 
 
 class SocialSerializer(serializers.ModelSerializer):
-    place = PlaceSerializer(source='place_set')
 
     def create(self, validated_data):
-        place_data = validated_data.pop('place_set')
-        place_data = Place.objects.create(
-            place=place,
-            **social_data
-        )
-        return place
+        social = Social.objects.create(**validated_data)
+        return social
 
     class Meta:
         model = Social
@@ -120,7 +114,7 @@ class ResturantSerializer(PlaceSerializer):
     
     address = AddressSerializer()
 
-    # social = SocialSerializer()
+    social = SocialSerializer()
 
     class Meta:
         model = Resturant
@@ -131,11 +125,14 @@ class ResturantSerializer(PlaceSerializer):
         address_data = validated_data.pop('address')
         
         city_data = address_data.pop('city')
+
         governorate_data = city_data.pop('governorate')
 
         openingHours_data = validated_data.pop('openingHours')
 
         phone_data = validated_data.pop('phone')
+
+        social_data = validated_data.pop('social')
         
         resturant = Resturant.objects.create(
 
@@ -153,6 +150,8 @@ class ResturantSerializer(PlaceSerializer):
 
             phone = Phone.objects.create(**phone_data),
 
+            social = Social.objects.create(**social_data),
+
             **validated_data,
         )
 
@@ -164,6 +163,8 @@ class MedicalClinicSerializer(PlaceSerializer):
     openingHours = OpeningHourSerializer()
     
     address = AddressSerializer()
+
+    phone = PhoneSerializer()
 
     # social = SocialSerializer()
 
@@ -181,6 +182,8 @@ class MedicalClinicSerializer(PlaceSerializer):
         governorate_data = city_data.pop('governorate')
 
         openingHours_data = validated_data.pop('openingHours')
+
+        phone_data = validated_data.pop('phone')
         
         medicalClinic = MedicalClinic.objects.create(
             address=Address.objects.create(
@@ -194,6 +197,8 @@ class MedicalClinicSerializer(PlaceSerializer):
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
+            phone = Phone.objects.create(**phone_data),
+
             **validated_data,
         )
         
@@ -205,6 +210,8 @@ class CarRepairSerializer(PlaceSerializer):
     openingHours = OpeningHourSerializer()
     
     address = AddressSerializer()
+
+    phone = PhoneSerializer()
 
     # social = SocialSerializer()
 
@@ -221,6 +228,8 @@ class CarRepairSerializer(PlaceSerializer):
         governorate_data = city_data.pop('governorate')
 
         openingHours_data = validated_data.pop('openingHours')
+
+        phone_data = validated_data.pop('phone')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(
@@ -234,6 +243,8 @@ class CarRepairSerializer(PlaceSerializer):
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
+            phone = Phone.objects.create(**phone_data),
+
             **validated_data,
         )
         return carRepair
@@ -244,6 +255,8 @@ class GroceryStoreSerializer(PlaceSerializer):
     openingHours = OpeningHourSerializer()
     
     address = AddressSerializer()
+
+    phone = PhoneSerializer()
 
     # social = SocialSerializer()
 
@@ -262,6 +275,8 @@ class GroceryStoreSerializer(PlaceSerializer):
         governorate_data = city_data.pop('governorate')
 
         openingHours_data = validated_data.pop('openingHours')
+
+        phone_data = validated_data.pop('phone')
         
         groceryStore = GroceryStore.objects.create(
             address=Address.objects.create(
@@ -274,7 +289,7 @@ class GroceryStoreSerializer(PlaceSerializer):
                 **address_data
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
-
+            phone = Phone.objects.create(**phone_data),
             **validated_data,
         )
 

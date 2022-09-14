@@ -5,7 +5,7 @@ __pycache__/
 mixins.py
 # C extensions
 *.so
-toAddInFuture.txt
+notes.txt
 # Distribution / packaging
 .Python
 build/
