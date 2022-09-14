@@ -34,7 +34,6 @@ class RestaurantModelViewSet(ModelViewSet):
     filterset_fields = ['Place_Name', 'id']
     #pagination_class = LargeResultsSetPagination
 
-   
 
     def get_permissions(self):
         if self.action in ['create', 'destroy', 'partial_update', 'update']:

@@ -109,6 +109,7 @@ class PhoneSerializer(serializers.ModelSerializer):
 class ResturantSerializer(PlaceSerializer):
 
     phone = PhoneSerializer()
+    
 
     openingHours = OpeningHourSerializer()
     
