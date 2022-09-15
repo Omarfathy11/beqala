@@ -1,7 +1,5 @@
 from django.db import models
 from user.models import User
-from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.postgres.fields import ArrayField
 
 
 
@@ -29,6 +27,7 @@ class Social(models.Model):
     instagram = models.CharField(max_length=100, null=True)
     twitter = models.CharField(max_length=100, null=True)
     website = models.CharField(max_length=100, null=True)
+
 
 class OpeningHour(models.Model):
     open_from = models.TimeField(auto_now_add=True)
@@ -95,7 +94,6 @@ class Rate(models.Model):
 
 
 
-
 class Cafe(Place):
     pass
 
@@ -113,7 +111,3 @@ class Gym(Place):
 
 class PlayGrounds(Place):
     pass
-
-
-
-

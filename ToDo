@@ -1,0 +1,11 @@
+- Remove All Uneeded Code and spaces
+- Remove All Uneeded Imports
+- Remove All Uneeded Files
+- Remove All Uneeded Prints
+
+
+# in User Serializer
+- Remove id field or change it to be read_only
+
+
+# Add update and delete functions into serializers

@@ -10,6 +10,3 @@ from django.core.paginator import Paginator
 class viewsets_user(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    # set up pagination
-    pagination_class = PageNumberPagination
