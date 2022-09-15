@@ -108,7 +108,7 @@ class PhoneSerializer(serializers.ModelSerializer):
 
 class ResturantSerializer(PlaceSerializer):
 
-    phone = PhoneSerializer()
+    phone = PhoneSerializer(source='phone_set', many=True)
     
 
     openingHours = OpeningHourSerializer()
@@ -165,7 +165,7 @@ class MedicalClinicSerializer(PlaceSerializer):
     
     address = AddressSerializer()
 
-    phone = PhoneSerializer()
+    phone = PhoneSerializer(source='phone_set', many=True)
 
     social = SocialSerializer()
 
@@ -216,7 +216,7 @@ class CarRepairSerializer(PlaceSerializer):
     
     address = AddressSerializer()
 
-    phone = PhoneSerializer()
+    phone = PhoneSerializer(source='phone_set', many=True)
 
     social = SocialSerializer()
 
@@ -265,7 +265,7 @@ class GroceryStoreSerializer(PlaceSerializer):
     
     address = AddressSerializer()
 
-    phone = PhoneSerializer()
+    phone = PhoneSerializer(source='phone_set', many=True)
 
     social = SocialSerializer()
 
