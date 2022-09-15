@@ -80,8 +80,6 @@ class CarRepairModelViewSet(ModelViewSet):
     filterset_fields = ['Place_Name']
 
 
-# Create your views here.
-
 # class PlaceModelViewSet(ModelViewSet):
 #      queryset = Place.objects.all()
 #      serializer_class = PlaceSerializer
