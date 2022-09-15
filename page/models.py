@@ -9,7 +9,6 @@ class Governorate(models.Model):
     Governorate_Name = models.CharField(max_length=30)
     zipCode = models.IntegerField(null=False)
 
-
 class City(models.Model):
     City_name = models.CharField(max_length=30, null=True)
     governorate = models.ForeignKey(Governorate, on_delete=models.SET_NULL, null=True)
@@ -18,7 +17,6 @@ class Address(models.Model):
     line1 = models.CharField(max_length=50)
     line2 = models.CharField(max_length=30, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
-
 
 
 class Phone(models.Model):
@@ -94,6 +92,8 @@ class Rate(models.Model):
     rate = models.IntegerField()
     place = models.ForeignKey(Place, on_delete=models.SET_NULL, null=True)
     stars = models.IntegerField()
+
+
 
 
 
