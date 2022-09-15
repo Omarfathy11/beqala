@@ -37,7 +37,6 @@ class OpeningHour(models.Model):
     to_Day = models.CharField(max_length=10)
 
     
-
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
     image = models.ImageField(null=True)
