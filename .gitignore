@@ -6,6 +6,7 @@ mixins.py
 # C extensions
 *.so
 notes.txt
+ToDo.md
 # Distribution / packaging
 .Python
 build/

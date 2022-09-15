@@ -97,8 +97,8 @@ class PhoneSerializer(serializers.ModelSerializer):
     place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
     def create(self, validated_data):
-        phones = Phone.objects.create(**validated_data)
-        return phones
+        phone = Phone.objects.create(**validated_data)
+        return phone
 
 
     class Meta:
@@ -109,13 +109,14 @@ class PhoneSerializer(serializers.ModelSerializer):
 class ResturantSerializer(PlaceSerializer):
 
     phone = PhoneSerializer(source='phone_set', many=True)
-    
 
     openingHours = OpeningHourSerializer()
     
     address = AddressSerializer()
 
     social = SocialSerializer()
+
+    #image = ImageCollectionSerializer() 
 
     class Meta:
         model = Resturant
@@ -131,9 +132,11 @@ class ResturantSerializer(PlaceSerializer):
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
 
         social_data = validated_data.pop('social')
+
+        #image_data = validated_data.pop('image')
         
         resturant = Resturant.objects.create(
 
@@ -149,16 +152,22 @@ class ResturantSerializer(PlaceSerializer):
 
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
-            phone = Phone.objects.create(**phone_data),
-
             social = Social.objects.create(**social_data),
+
+            #image = ImageCollection.objects.create(**image_data),
 
             **validated_data,
         )
 
+        for phone in phone_data:
+            phone = Phone.objects.create(
+                place_id=resturant.id,
+                **phone
+            )
+
         return resturant
-
-
+        
+       
 class MedicalClinicSerializer(PlaceSerializer):
 
     openingHours = OpeningHourSerializer()
@@ -184,7 +193,7 @@ class MedicalClinicSerializer(PlaceSerializer):
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
 
         social_data = validated_data.pop('social')
         
@@ -206,7 +215,13 @@ class MedicalClinicSerializer(PlaceSerializer):
 
             **validated_data,
         )
-        
+         
+        for phone in phone_data:
+            phone = Phone.objects.create(
+                place_id=resturant.id,
+                **phone
+            )
+
         return medicalClinic
 
 
