@@ -225,15 +225,15 @@ class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSe
          
         for phone in phone_data:
             phone = Phone.objects.create(
-                place_id=resturant.id,
+                place_id=medicalClinic.id,
                 **phone
             )
 
-        for image in image_data:
-            image = ImageCollection.objects.create(
-                place_id=resturant.id,
-                **image
-            )
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
 
         return medicalClinic
 
@@ -262,7 +262,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
 
         social_data = validated_data.pop('social')
 
@@ -289,15 +289,15 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         for phone in phone_data:
             phone = Phone.objects.create(
-                place_id=resturant.id,
+                place_id=carRepair.id,
                 **phone
             )
 
-        for image in image_data:
-            image = ImageCollection.objects.create(
-                place_id=resturant.id,
-                **image
-            )
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
 
         return carRepair
 
@@ -328,7 +328,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
         
         social_data = validated_data.pop('social')
 
@@ -353,7 +353,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
         for phone in phone_data:
             phone = Phone.objects.create(
-                place_id=resturant.id,
+                place_id=groceryStore.id,
                 **phone
             )
         
