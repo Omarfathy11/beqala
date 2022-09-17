@@ -5,8 +5,6 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import generics
 
-
-
 from .serializers import GovernorateSerializer, CitySerializer, AddressSerializer
 from .serializers import PhoneSerializer, SocialSerializer, OpeningHourSerializer
 from .serializers import PlaceSerializer, ResturantSerializer, MedicalClinicSerializer
@@ -23,7 +21,6 @@ import django_filters
 from user.authentication import TokenAuthentication
 from rest_framework import pagination
 from rest_framework import status
-
 
 
 class RestaurantModelViewSet(ModelViewSet):
@@ -54,7 +51,7 @@ class MedicalClinicModelViewSet(ModelViewSet):
     #pagination_class = LargeResultsSetPagination
 
     def get_permissions(self):
-        if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
+        if self.action in ['create', 'destroy', 'partial_update', 'update']:
             self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
 
@@ -76,9 +73,14 @@ class CarRepairModelViewSet(ModelViewSet):
     queryset = CarRepair.objects.all()
     serializer_class = CarRepairSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = []
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = ['Place_Name']
+
+    def get_permissions(self):
+        if self.action in ['create', 'destroy', 'partial_update', 'update']:
+            self.permission_classes =[]
+        return super().get_permissions()
 
 
 # class PlaceModelViewSet(ModelViewSet):
