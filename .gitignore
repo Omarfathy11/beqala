@@ -6,6 +6,7 @@ mixins.py
 # C extensions
 *.so
 notes.txt
+toIgnore.txt
 ToDo
 # Distribution / packaging
 .Python

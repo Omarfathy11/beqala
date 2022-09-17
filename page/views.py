@@ -3,6 +3,8 @@ from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework import generics
+
 
 
 from .serializers import GovernorateSerializer, CitySerializer, AddressSerializer
@@ -40,8 +42,7 @@ class RestaurantModelViewSet(ModelViewSet):
             self.permission_classes =[]
             #self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
-
-
+        
 class MedicalClinicModelViewSet(ModelViewSet):
     queryset = MedicalClinic.objects.all()
     serializer_class = MedicalClinicSerializer

@@ -9,7 +9,7 @@ from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
 
 
-class OpeningHourSerializer(serializers.ModelSerializer):
+class OpeningHourSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     class Meta:
         model = OpeningHour
         fields = '__all__'
@@ -19,33 +19,35 @@ class OpeningHourSerializer(serializers.ModelSerializer):
         return openingHours
 
 
-class GovernorateSerializer(serializers.ModelSerializer):
+class GovernorateSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Governorate
         fields = '__all__'
 
 
-class CitySerializer(serializers.ModelSerializer):
+class CitySerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     governorate = GovernorateSerializer()
 
-    def create(self, validated_data):
-        governorate_data = validated_data.pop('governorate')
-        city = City.objects.create(
-            governorate=Governorate.objects.create(
-                **governorate_data
-            )
-            ** validated_data,
-        )
-        return city
+    # def create(self, validated_data):
+    #     governorate_data = validated_data.pop('governorate')
+    #     city = City.objects.create(
+    #         governorate=Governorate.objects.create(
+    #             **governorate_data
+    #         )
+    #         ** validated_data,
+    #     )
+
+    #     return city
+
 
     class Meta:
         model = City
         fields = '__all__'
 
 
-class AddressSerializer(serializers.ModelSerializer):
+class AddressSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     city = CitySerializer()
 
@@ -53,26 +55,27 @@ class AddressSerializer(serializers.ModelSerializer):
         model = Address
         fields = '__all__'
 
-    def create(self, validated_data):
-        city_data = validated_data.pop('city')
-        governorate_data = city_data.pop('governorate')
-        address = Address.objects.create(
-            city=City.objects.create(
-                governorate=Governorate.objects.create(
-                    **governorate_data
-                )
-                ** city_data
-            ),
-            **validated_data
-        )
-        return address
+    # def create(self, validated_data):
+    #     city_data = validated_data.pop('city')
+    #     governorate_data = city_data.pop('governorate')
+    #     address = Address.objects.create(
+    #         city=City.objects.create(
+    #             governorate=Governorate.objects.create(
+    #                 **governorate_data
+    #             )
+    #             ** city_data
+    #         ),
+    #         **validated_data
+    #     )
+
+    #     return address
 
 
-class PlaceSerializer(serializers.ModelSerializer):
+class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     pass
 
 
-class SocialSerializer(serializers.ModelSerializer):
+class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerializer, ):
 
     def create(self, validated_data):
         social = Social.objects.create(**validated_data)
@@ -83,7 +86,7 @@ class SocialSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ImageCollectionSerializer(serializers.ModelSerializer):
+class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
@@ -92,7 +95,7 @@ class ImageCollectionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PhoneSerializer(serializers.ModelSerializer):
+class PhoneSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
@@ -106,7 +109,7 @@ class PhoneSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResturantSerializer(PlaceSerializer):
+class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     phone = PhoneSerializer(source='phone_set', many=True)
 
@@ -116,7 +119,7 @@ class ResturantSerializer(PlaceSerializer):
 
     social = SocialSerializer()
 
-    #image = ImageCollectionSerializer() 
+    #image = ImageCollectionSerializer(source='imagecollection_set', many=True, required=False) 
 
     class Meta:
         model = Resturant
@@ -136,7 +139,7 @@ class ResturantSerializer(PlaceSerializer):
 
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('image')
+        #image_data = validated_data.pop('imagecollection_set')
         
         resturant = Resturant.objects.create(
 
@@ -168,7 +171,7 @@ class ResturantSerializer(PlaceSerializer):
         return resturant
         
        
-class MedicalClinicSerializer(PlaceSerializer):
+class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     openingHours = OpeningHourSerializer()
     
@@ -177,6 +180,8 @@ class MedicalClinicSerializer(PlaceSerializer):
     phone = PhoneSerializer(source='phone_set', many=True)
 
     social = SocialSerializer()
+
+    
 
     class Meta:
         model = MedicalClinic
@@ -197,6 +202,8 @@ class MedicalClinicSerializer(PlaceSerializer):
 
         social_data = validated_data.pop('social')
         
+        #image_data = validated_data.pop('imagecollection_set')
+
         medicalClinic = MedicalClinic.objects.create(
             address=Address.objects.create(
                 city=City.objects.create(
@@ -218,14 +225,20 @@ class MedicalClinicSerializer(PlaceSerializer):
          
         for phone in phone_data:
             phone = Phone.objects.create(
-                place_id=resturant.id,
+                place_id=medicalClinic.id,
                 **phone
             )
+
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
 
         return medicalClinic
 
 
-class CarRepairSerializer(PlaceSerializer):
+class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     openingHours = OpeningHourSerializer()
     
@@ -249,9 +262,11 @@ class CarRepairSerializer(PlaceSerializer):
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
 
         social_data = validated_data.pop('social')
+
+        #image_data = validated_data.pop('imagecollection_set')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(
@@ -271,10 +286,23 @@ class CarRepairSerializer(PlaceSerializer):
 
             **validated_data,
         )
+
+        for phone in phone_data:
+            phone = Phone.objects.create(
+                place_id=carRepair.id,
+                **phone
+            )
+
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
+
         return carRepair
 
 
-class GroceryStoreSerializer(PlaceSerializer):
+class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     openingHours = OpeningHourSerializer()
     
@@ -300,9 +328,11 @@ class GroceryStoreSerializer(PlaceSerializer):
 
         openingHours_data = validated_data.pop('openingHours')
 
-        phone_data = validated_data.pop('phone')
+        phone_data = validated_data.pop('phone_set')
         
         social_data = validated_data.pop('social')
+
+        #image_data = validated_data.pop('imagecollection_set')
         
         groceryStore = GroceryStore.objects.create(
             address=Address.objects.create(
@@ -317,8 +347,16 @@ class GroceryStoreSerializer(PlaceSerializer):
             openingHours=OpeningHour.objects.create(**openingHours_data),
             phone = Phone.objects.create(**phone_data),
             social = Social.objects.create(**social_data),
+            
             **validated_data,
         )
+
+        for phone in phone_data:
+            phone = Phone.objects.create(
+                place_id=groceryStore.id,
+                **phone
+            )
+        
 
         return groceryStore
 
