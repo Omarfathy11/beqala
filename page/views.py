@@ -33,7 +33,7 @@ class RestaurantModelViewSet(ModelViewSet):
     permission_classes = []
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     #filterset_class = Resturant()
-    filterset_fields = ['Place_Name', 'id']
+    filterset_fields = ['Place_Name']
     #pagination_class = LargeResultsSetPagination
 
 
@@ -68,8 +68,8 @@ class GroceryStoreModelViewSet(ModelViewSet):
     #pagination_class = LargeResultsSetPagination
 
     def get_permissions(self):
-        if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
-            self.permission_classes =[IsAuthenticated]
+        if self.action in ['create', 'destroy', 'partial_update', 'update']:
+            self.permission_classes =[]
         return super().get_permissions()
 
 class CarRepairModelViewSet(ModelViewSet):
