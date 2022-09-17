@@ -216,7 +216,7 @@ class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSe
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
-            phone = Phone.objects.create(**phone_data),
+            #phone = Phone.objects.create(**phone_data),
 
             social = Social.objects.create(**social_data),
 
@@ -280,7 +280,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
-            phone = Phone.objects.create(**phone_data),
+            #phone = Phone.objects.create(**phone_data),
 
             social = Social.objects.create(**social_data),
 
@@ -345,7 +345,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
                 **address_data
             ),
             openingHours=OpeningHour.objects.create(**openingHours_data),
-            phone = Phone.objects.create(**phone_data),
+            #phone = Phone.objects.create(**phone_data),
             social = Social.objects.create(**social_data),
             
             **validated_data,
