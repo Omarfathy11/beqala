@@ -47,7 +47,7 @@ class CitySerializer(WritableNestedModelSerializer, serializers.ModelSerializer)
         fields = '__all__'
 
 
-class AddressSerializer(WritableNestedModelSerializer, serializers.ModelSerializer, ):
+class AddressSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     city = CitySerializer()
 
@@ -202,7 +202,7 @@ class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSe
 
         social_data = validated_data.pop('social')
         
-        image_data = validated_data.pop('imagecollection_set')
+        #image_data = validated_data.pop('imagecollection_set')
 
         medicalClinic = MedicalClinic.objects.create(
             address=Address.objects.create(
@@ -266,7 +266,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         social_data = validated_data.pop('social')
 
-        image_data = validated_data.pop('imagecollection_set')
+        #image_data = validated_data.pop('imagecollection_set')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(

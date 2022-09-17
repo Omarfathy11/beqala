@@ -26,7 +26,7 @@ from rest_framework import status
 
 
 
-class RestaurantModelViewSet(ModelViewSet, generics.RetrieveDestroyAPIView,  generics.UpdateAPIView):
+class RestaurantModelViewSet(ModelViewSet):
     queryset = Resturant.objects.all()
     serializer_class = ResturantSerializer
     authentication_classes = [TokenAuthentication]
