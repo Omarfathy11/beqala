@@ -13,6 +13,3 @@ path('', include(route.urls)),
 path('token/',views.obtain_auth_token),
 #path('', viewsets_user),
 ]
-urlpatterns += [
-    path('api-token-auth/', views.obtain_auth_token)
-]

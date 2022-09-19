@@ -88,7 +88,7 @@ class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
 
 class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
-    place = PlaceSerializer(source='place_set', read_only=True, many=True)
+    place = PlaceSerializer(source='place_set', read_only=True, many=False, required=False)
 
     class Meta:
         model = ImageCollection
@@ -119,7 +119,7 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=False, required=False) 
+    #image = ImageCollectionSerializer(source='imagecollection_set', many=False, required=False) 
 
     class Meta:
         model = Resturant
