@@ -12,12 +12,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
-from dotenv import load_dotenv
 load_dotenv('.env')
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -41,14 +40,36 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework',
     'django_filters',
-    'user',
     'page',
+    'user',
 ]
 
+REST_FRAMEWORK = {
+    
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
 
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework_simplejwt.authentication.JWTAuthentication', 
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],
+
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+
+    'PAGE_SIZE': 100,
+
+
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -86,7 +107,7 @@ WSGI_APPLICATION = 'beqala.wsgi.application'
 
 
 DATABASES = {
-    'default' :{
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         "NAME": os.environ.get("DB_DATABASE"),
         "USER": os.environ.get("DB_USERNAME"),
@@ -95,7 +116,6 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT"),
     }
 }
-
 
 
 # Password validation
@@ -139,16 +159,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.TokenAuthentication'],
-
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-
-    'PAGE_SIZE': 200,
-
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-}

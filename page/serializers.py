@@ -119,7 +119,7 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    #image = ImageCollectionSerializer(source='imagecollection_set', many=True, required=False) 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=False, required=False) 
 
     class Meta:
         model = Resturant
