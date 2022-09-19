@@ -25,8 +25,9 @@ from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 
 class ImageCollectionModelViewSet(ModelViewSet):
     queryset = ImageCollection.objects.all()
-    serializer_class = ImageCollectionSerializer()
+    serializer_class = ImageCollectionSerializer
     authentication_classes = []
+    parser_classes = [MultiPartParser, JSONParser, FileUploadParser]
     permission_classes = []
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = []
@@ -46,7 +47,7 @@ class RestaurantModelViewSet(ModelViewSet):
     #filterset_class = Resturant()
     filterset_fields = ['Place_Name']
     #pagination_class = LargeResultsSetPagination
-    
+
 
     def get_permissions(self):
         if self.action in ['create', 'destroy', 'partial_update', 'update']:

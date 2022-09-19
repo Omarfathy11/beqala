@@ -86,7 +86,9 @@ class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
         fields = '__all__'
 
 
-class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer, serializers.ImageField):
+
+    image = serializers.ImageField(max_length=None, read_only=True, required=False)
 
     place = PlaceSerializer(source='place_set', read_only=True, many=False, required=False)
 
