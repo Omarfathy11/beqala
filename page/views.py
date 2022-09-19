@@ -21,6 +21,7 @@ import django_filters
 from user.authentication import TokenAuthentication
 from rest_framework import pagination
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 
 
 class RestaurantModelViewSet(ModelViewSet):
@@ -39,7 +40,7 @@ class RestaurantModelViewSet(ModelViewSet):
             self.permission_classes =[]
             #self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
-        
+
 class MedicalClinicModelViewSet(ModelViewSet):
     queryset = MedicalClinic.objects.all()
     serializer_class = MedicalClinicSerializer
@@ -84,15 +85,15 @@ class CarRepairModelViewSet(ModelViewSet):
 
 
 # class PlaceModelViewSet(ModelViewSet):
-#      queryset = Place.objects.all()
-#      serializer_class = PlaceSerializer
-#      authentication_classes = [TokenAuthentication]
-#      permission_classes = [IsAuthenticatedOrReadOnly]
-#      filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-#      filterset_fields = ['Place_Name']
+    #  queryset = Place.objects.all()
+    #  serializer_class = PlaceSerializer
+    #  authentication_classes = [TokenAuthentication]
+    #  permission_classes = [IsAuthenticatedOrReadOnly]
+    #  filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    #  filterset_fields = ['Place_Name']
 
 
-#      def get_permissions(self):
-#          if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
-#              self.permission_classes =[IsAuthenticated]
-#          return super().get_permissions()
+    #  def get_permissions(self):
+    #      if self.request.method =='post' or self.request.method == 'patch' or self.request.method =='delete':
+    #          self.permission_classes =[IsAuthenticated]
+    #      return super().get_permissions()

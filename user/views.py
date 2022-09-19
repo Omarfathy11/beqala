@@ -1,4 +1,6 @@
 import imp
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from rest_framework import generics, mixins, viewsets
 from .serializers import UserSerializer
@@ -10,3 +12,5 @@ from django.core.paginator import Paginator
 class viewsets_user(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+
