@@ -10,7 +10,7 @@ from .serializers import PhoneSerializer, SocialSerializer, OpeningHourSerialize
 from .serializers import PlaceSerializer, ResturantSerializer, MedicalClinicSerializer
 from .serializers import GovernorateSerializer, GroceryStoreSerializer, CarRepairSerializer, ImageCollectionSerializer
 
-from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate
+from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate, ImageCollection
 from .models import Address, Phone, Social, OpeningHour, Review
 
 from rest_framework.viewsets import ModelViewSet
@@ -23,6 +23,19 @@ from rest_framework import pagination
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 
+class ImageCollectionModelViewSet(ModelViewSet):
+    queryset = ImageCollection.objects.all()
+    serializer_class = ImageCollectionSerializer()
+    authentication_classes = []
+    permission_classes = []
+    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filterset_fields = []
+
+    def get_permissions(self):
+        if self.action in ['create', 'destroy', 'partial_update', 'update']:
+            self.permission_classes =[]
+            #self.permission_classes =[IsAuthenticated]
+        return super().get_permissions()
 
 class RestaurantModelViewSet(ModelViewSet):
     queryset = Resturant.objects.all()
@@ -33,7 +46,7 @@ class RestaurantModelViewSet(ModelViewSet):
     #filterset_class = Resturant()
     filterset_fields = ['Place_Name']
     #pagination_class = LargeResultsSetPagination
-
+    
 
     def get_permissions(self):
         if self.action in ['create', 'destroy', 'partial_update', 'update']:

@@ -16,6 +16,7 @@ class Address(models.Model):
     line2 = models.CharField(max_length=30, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
 
+
 class Phone(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
     phone = models.CharField(max_length=15, null=False)
