@@ -43,16 +43,20 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'django_filters',
+    'versatileimagefield',
     'page',
     'user',
+    'address',
+    'nested_relations',
+    'rest_framework_tricks',
 ]
+
+GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
 
 REST_FRAMEWORK = {
     
-    'DEFAULT_PARSER_CLASSES': [
+     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
-        'rest_framework.parsers.FormParser',
-        'rest_framework.parsers.MultiPartParser',
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES':[
@@ -67,7 +71,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 
     'PAGE_SIZE': 50,
-
 
 }
 
@@ -152,7 +155,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

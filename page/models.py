@@ -1,5 +1,12 @@
 from django.db import models
 from user.models import User
+from versatileimagefield.fields import VersatileImageField
+from versatileimagefield.placeholder import OnDiscPlaceholderImage
+import os
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.core.validators import FileExtensionValidator
+
 
 class Governorate(models.Model):
     Governorate_Name = models.CharField(max_length=30)
@@ -38,10 +45,11 @@ class OpeningHour(models.Model):
 
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
-    image = models.ImageField(null=True)
-    is_default = models.BooleanField(default=False)
-    
+    image = models.ImageField(null=True, upload_to='places/', validators=[FileExtensionValidator(['*'])])
+    #image = models.CharField(max_length=500, null=True)
+    is_default = models.BooleanField(default=True)
 
+    
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100, null=False)
     description = models.TextField(max_length=800, null=True)
@@ -55,6 +63,7 @@ class Resturant(Place):
     atmosphere = models.CharField(max_length=30, null=True)
    # languageSpoken = models.CharField(max_length=30)
    # features = models.CharField(max_length=100)
+   
 
 
 class MedicalClinic(Place):
