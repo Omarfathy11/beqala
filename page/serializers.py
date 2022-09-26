@@ -80,7 +80,6 @@ class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer
     class Meta:
         model = Place
         fields = '__all__'
-        nested_proxy_field = True
 
 
 class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
@@ -183,11 +182,11 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
                 **phone
             )
 
-        for image in image_data:
-            image = ImageCollection.objects.create(
-                place_id=resturant.id,
-                **image
-            )
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
 
         return resturant
         
@@ -269,6 +268,8 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
     class Meta:
         model = CarRepair
         fields = '__all__'
@@ -287,7 +288,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('imagecollection_set')
+        image_data = validated_data.pop('imagecollection_set')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(
@@ -333,6 +334,8 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
     social = SocialSerializer()
 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
     class Meta:
         model = GroceryStore
         fields = '__all__'
@@ -353,7 +356,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
         
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('imagecollection_set')
+        image_data = validated_data.pop('imagecollection_set')
         
         groceryStore = GroceryStore.objects.create(
             address=Address.objects.create(
