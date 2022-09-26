@@ -133,7 +133,7 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set') 
 
 
     class Meta:
@@ -268,7 +268,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set', allow_null=True) 
 
     class Meta:
         model = CarRepair
@@ -334,7 +334,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set') 
 
     class Meta:
         model = GroceryStore

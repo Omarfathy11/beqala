@@ -44,7 +44,7 @@ class OpeningHour(models.Model):
 
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
-    image = models.ImageField(null=True, upload_to='places/')
+    image = models.ImageField(null=True, upload_to='places/', blank=True)
     #image = models.CharField(max_length=500, null=True)
     is_default = models.BooleanField(default=True)
 
