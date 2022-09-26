@@ -5,8 +5,12 @@ from .models import Governorate, City, Address, Phone, Social, OpeningHour, Plac
 from .models import CarRepair, ImageCollection
 from .models import MedicalClinic, GroceryStore, ImageCollection
 
+from versatileimagefield.serializers import VersatileImageFieldSerializer
+
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
+
+
 
 
 class OpeningHourSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
@@ -72,10 +76,13 @@ class AddressSerializer(WritableNestedModelSerializer, serializers.ModelSerializ
 
 
 class PlaceSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    pass
+    
+    class Meta:
+        model = Place
+        fields = '__all__'
 
 
-class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerializer, ):
+class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
     def create(self, validated_data):
         social = Social.objects.create(**validated_data)
@@ -88,11 +95,18 @@ class SocialSerializer(WritableNestedModelSerializer, serializers.ModelSerialize
 
 class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
-    place = PlaceSerializer(source='place_set', read_only=True, many=False, required=False)
+
+    place = PlaceSerializer(source='place_set', read_only=True, many=True)
+
+    def create(self, validated_data):
+        image = ImageCollection.objects.create(**validated_data)
+        return image
+
 
     class Meta:
         model = ImageCollection
         fields = '__all__'
+        
 
 
 class PhoneSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
@@ -119,11 +133,13 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    #image = ImageCollectionSerializer(source='imagecollection_set', many=False, required=False) 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
 
     class Meta:
         model = Resturant
         fields = '__all__'
+        
 
     def create(self, validated_data):
         
@@ -139,7 +155,7 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('imagecollection_set')
+        image_data = validated_data.pop('imagecollection_set')
         
         resturant = Resturant.objects.create(
 
@@ -157,8 +173,6 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
             social = Social.objects.create(**social_data),
 
-            #image = ImageCollection.objects.create(**image_data),
-
             **validated_data,
         )
 
@@ -167,6 +181,12 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
                 place_id=resturant.id,
                 **phone
             )
+
+        # for image in image_data:
+        #     image = ImageCollection.objects.create(
+        #         place_id=resturant.id,
+        #         **image
+        #     )
 
         return resturant
         
@@ -248,6 +268,8 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
     class Meta:
         model = CarRepair
         fields = '__all__'
@@ -266,7 +288,7 @@ class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('imagecollection_set')
+        image_data = validated_data.pop('imagecollection_set')
         
         carRepair = CarRepair.objects.create(
             address=Address.objects.create(
@@ -312,6 +334,8 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
     social = SocialSerializer()
 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
     class Meta:
         model = GroceryStore
         fields = '__all__'
@@ -332,7 +356,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
         
         social_data = validated_data.pop('social')
 
-        #image_data = validated_data.pop('imagecollection_set')
+        image_data = validated_data.pop('imagecollection_set')
         
         groceryStore = GroceryStore.objects.create(
             address=Address.objects.create(
