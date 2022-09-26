@@ -44,11 +44,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'versatileimagefield',
+    "corsheaders",
+    'rest_framework_tricks',
+    'nested_relations',
+    'any_imagefield',
     'page',
     'user',
     'address',
-    'nested_relations',
-    'rest_framework_tricks',
 ]
 
 GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
@@ -77,6 +79,7 @@ REST_FRAMEWORK = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -166,3 +169,29 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "authenticate"
+]

@@ -10,6 +10,8 @@ from versatileimagefield.serializers import VersatileImageFieldSerializer
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
 
+from rest_framework import parsers
+from formencode.variabledecode import variable_decode
 
 
 
@@ -98,9 +100,11 @@ class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.Model
 
     place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
+
     def create(self, validated_data):
         image = ImageCollection.objects.create(**validated_data)
         return image
+
 
 
     class Meta:
@@ -133,12 +137,13 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set') 
 
 
     class Meta:
         model = Resturant
         fields = '__all__'
+        extra_kwargs = {'image': {'required': False},}
         
 
     def create(self, validated_data):
@@ -172,6 +177,8 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
             openingHours=OpeningHour.objects.create(**openingHours_data),
 
             social = Social.objects.create(**social_data),
+            
+            image = ImageCollection.objects.create(**image_data),
 
             **validated_data,
         )
@@ -260,15 +267,15 @@ class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSe
 
 class CarRepairSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 
-    openingHours = OpeningHourSerializer()
+    openingHours = OpeningHourSerializer(allow_null=True)
     
     address = AddressSerializer()
 
     phone = PhoneSerializer(source='phone_set', many=True)
 
-    social = SocialSerializer()
+    social = SocialSerializer(allow_null=True)
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set', allow_null=True) 
 
     class Meta:
         model = CarRepair
@@ -334,7 +341,7 @@ class GroceryStoreSerializer(WritableNestedModelSerializer, serializers.ModelSer
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+    image = ImageCollectionSerializer(source='imagecollection_set') 
 
     class Meta:
         model = GroceryStore
