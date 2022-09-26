@@ -27,7 +27,22 @@ from rest_framework import pagination
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser, FormParser
 
-class ImageCollectionModelViewSet(ModelViewSet, ViewSetMixin):
+from rest_framework import parsers
+from formencode.variabledecode import variable_decode
+
+
+class MultipartFormencodeParser(parsers.MultiPartParser):
+
+    def parse(self, stream, media_type=None, parser_context=None):
+        result = super().parse(
+            stream,
+            media_type=media_type,
+            parser_context=parser_context
+        )
+        data = variable_decode(result.data)
+        return parsers.DataAndFiles(data, result.files)
+
+class ImageCollectionModelViewSet(ModelViewSet, generics.CreateAPIView):
     queryset = ImageCollection.objects.all()
     serializer_class = ImageCollectionSerializer
     authentication_classes = []
@@ -41,7 +56,7 @@ class ImageCollectionModelViewSet(ModelViewSet, ViewSetMixin):
             #self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
 
-class RestaurantModelViewSet(ModelViewSet):
+class RestaurantModelViewSet(ModelViewSet, generics.CreateAPIView):
     queryset = Resturant.objects.all()
     serializer_class = ResturantSerializer
     authentication_classes = [TokenAuthentication]
@@ -51,6 +66,22 @@ class RestaurantModelViewSet(ModelViewSet):
     #filterset_class = Resturant()
     filterset_fields = ['Place_Name']
     #pagination_class = LargeResultsSetPagination
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    # def get_success_headers(self, data):
+    #     try:
+    #         return {'Location': str(data[api_settings.URL_FIELD_NAME])}
+    #     except (TypeError, KeyError):
+    #         return {}
 
 
     def get_permissions(self):

@@ -5,6 +5,9 @@ from versatileimagefield.placeholder import OnDiscPlaceholderImage
 import os
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from upload_validator import FileTypeValidator
+from any_imagefield.models import AnyImageField
+
 
 
 class Governorate(models.Model):
@@ -44,8 +47,20 @@ class OpeningHour(models.Model):
 
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
-    image = models.ImageField(null=True, upload_to='places/', blank=True)
-    #image = models.CharField(max_length=500, null=True)
+    image = models.ImageField(
+                null=True, upload_to='places/', 
+                blank=True, default='default.jpg',
+                validators=[FileTypeValidator(
+                allowed_types=[ 'image/jpeg','image/png',]
+                )])
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+        #image = Image.open(self.image.path)
+
+    def __unicode__(self):
+        return self.title
+
+    #url = models.TextField(max_length=500, null=False, default='image')
     is_default = models.BooleanField(default=True)
 
     

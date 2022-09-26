@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework_tricks',
     'nested_relations',
+    'any_imagefield',
     'page',
     'user',
     'address',
