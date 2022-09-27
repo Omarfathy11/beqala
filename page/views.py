@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from .serializers import GovernorateSerializer, CitySerializer, AddressSerializer
 from .serializers import PhoneSerializer, SocialSerializer, OpeningHourSerializer
 from .serializers import PlaceSerializer, ResturantSerializer, MedicalClinicSerializer
-from .serializers import GovernorateSerializer, GroceryStoreSerializer, CarRepairSerializer, ImageCollectionSerializer
+from .serializers import GovernorateSerializer, GroceryStoreSerializer, CarRepairSerializer, ImageCollectionSerializer#, ListResturantSerializer
 
 from .models import Place, MedicalClinic, GroceryStore, CarRepair, Resturant, Review, Rate, City, Governorate, ImageCollection
 from .models import Address, Phone, Social, OpeningHour, Review
@@ -50,13 +50,22 @@ class ImageCollectionModelViewSet(ModelViewSet, generics.CreateAPIView):
     permission_classes = []
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
+
+    @action(methods=['post'], detail=True, permission_classes=[])
+    def upload_docs(request):
+        try:
+            file = request.data['file']
+        except KeyError:
+            raise ParseError('Request has no resource file attached')
+        image = ImageCollection.objects.create(image=file)
+
     def get_permissions(self):
         if self.action in ['create', 'destroy', 'partial_update', 'update']:
             self.permission_classes =[]
             #self.permission_classes =[IsAuthenticated]
         return super().get_permissions()
 
-class RestaurantModelViewSet(ModelViewSet, generics.CreateAPIView):
+class RestaurantModelViewSet(ModelViewSet, generics.CreateAPIView, generics.ListAPIView):
     queryset = Resturant.objects.all()
     serializer_class = ResturantSerializer
     authentication_classes = [TokenAuthentication]
@@ -67,12 +76,29 @@ class RestaurantModelViewSet(ModelViewSet, generics.CreateAPIView):
     filterset_fields = ['Place_Name']
     #pagination_class = LargeResultsSetPagination
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    # def get_queryset(self):
+    #     return ImageCollection.objects.all()
+
+    # def get_serializer_class(self):
+    #     if self.action == 'list':
+    #         self.serializer_class = ListResturantSerializer
+    #     return super().get_serializer_class()
+
+    @action(methods=['post'], detail=True, permission_classes=[])
+    def upload_docs(request):
+        try:
+            file = request.data['file']
+        except KeyError:
+            raise ParseError('Request has no resource file attached')
+        image = ImageCollection.objects.create(image=file)
+        return Response(serializer.data.file)
+
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save()

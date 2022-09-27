@@ -7,6 +7,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from upload_validator import FileTypeValidator
 from any_imagefield.models import AnyImageField
+from upload_validator import FileTypeValidator
+
 
 
 
@@ -48,21 +50,17 @@ class OpeningHour(models.Model):
 class ImageCollection(models.Model):
     place = models.ForeignKey('Place', on_delete=models.SET_NULL, null=True)
     image = models.ImageField(
+                max_length=254,
                 null=True, upload_to='places/', 
                 blank=True, default='default.jpg',
                 validators=[FileTypeValidator(
-                allowed_types=[ 'image/jpeg','image/png',]
+                    allowed_types=['image/jpeg','image/png']
                 )])
-    # def save(self, *args, **kwargs):
-    #     super().save(*args, **kwargs)
-        #image = Image.open(self.image.path)
 
     def __unicode__(self):
         return self.title
 
-    #url = models.TextField(max_length=500, null=False, default='image')
-    is_default = models.BooleanField(default=True)
-
+    
     
 class Place(models.Model):
     Place_Name = models.CharField(max_length=100, null=False)
@@ -70,6 +68,7 @@ class Place(models.Model):
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True)
     openingHours = models.ForeignKey(OpeningHour, on_delete=models.SET_NULL, null=True)
     social = models.ForeignKey(Social, on_delete=models.SET_NULL, null=True)
+    #image_url = models.SlugField(null=False, default='image.jpg')
     
 
 class Resturant(Place):
@@ -84,7 +83,6 @@ class MedicalClinic(Place):
     products = models.TextField(max_length=200)
     #languageSpoken = models.CharField(max_length=30)
     brands = models.CharField(max_length=40)
-    
     #specialties = models.TextField(max_length=100)
 
 
