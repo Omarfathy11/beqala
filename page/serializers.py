@@ -100,16 +100,22 @@ class ImageCollectionSerializer(WritableNestedModelSerializer, serializers.Model
 
     place = PlaceSerializer(source='place_set', read_only=True, many=True)
 
+    image_url = serializers.SerializerMethodField('get_image_url')
 
     def create(self, validated_data):
         image = ImageCollection.objects.create(**validated_data)
         return image
 
-
+    def get_image_url(self, obj):
+        # request = self.context.get('request')
+        # image_url = place.image.url
+        # return request.build_absolute_uri(image_url)
+        return obj.image.url
 
     class Meta:
         model = ImageCollection
         fields = '__all__'
+        depth = 2
         
 
 
@@ -137,16 +143,33 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
     social = SocialSerializer()
 
-    image = ImageCollectionSerializer(source='imagecollection_set') 
+    image = ImageCollectionSerializer(source='imagecollection_set', many=True) 
+
+    # image_url = serializers.SerializerMethodField('get_image_url')
+
+    # def get_image_url(self, obj):
+    #     request = self.context.get('request')
+    #     image_url = Resturant.image.url
+    #     return request.build_absolute_uri(image_url)
+    #     return obj.image.url
 
 
     class Meta:
         model = Resturant
         fields = '__all__'
-        extra_kwargs = {'image': {'required': False},}
+        depth = 3
         
 
+    # def get_image_url(self, restaurant):
+    #     request = self.context.get('request')
+    #     image_url = restaurant.image.url
+    #     return request.build_absolute_uri(image_url)
+
     def create(self, validated_data):
+
+        print("###################################")
+        print(validated_data)
+        print("###################################")
         
         address_data = validated_data.pop('address')
         
@@ -178,10 +201,14 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
 
             social = Social.objects.create(**social_data),
             
-            image = ImageCollection.objects.create(**image_data),
+            #image = ImageCollection.objects.create(**image_data),
 
             **validated_data,
         )
+        
+        # image = ImageCollection.objects.create(
+        #     place_id=resturant.id,
+        #     **image_data),
 
         for phone in phone_data:
             phone = Phone.objects.create(
@@ -189,14 +216,27 @@ class ResturantSerializer(WritableNestedModelSerializer, serializers.ModelSerial
                 **phone
             )
 
-        # for image in image_data:
-        #     image = ImageCollection.objects.create(
-        #         place_id=resturant.id,
-        #         **image
-        #     )
+        for image in image_data:
+            image = ImageCollection.objects.create(
+                place_id=resturant.id,
+                **image
+            )
 
         return resturant
-        
+
+
+class ListResturantSerializer(serializers.ModelSerializer):
+
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        image = ImageCollectionSerializer.image.url()
+        return request.build_absolute_uri(image)
+
+    class Meta:
+        model = Resturant
+        fields = '__all__'
+        depth = 2
        
 class MedicalClinicSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
 

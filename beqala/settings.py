@@ -67,6 +67,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated'
     ],
+
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ],
+    'UPLOADED_FILES_USE_URL': True,
     
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
