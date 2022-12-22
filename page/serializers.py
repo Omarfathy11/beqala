@@ -5,14 +5,10 @@ from .models import Governorate, City, Address, Phone, Social, OpeningHour, Plac
 from .models import CarRepair, ImageCollection
 from .models import MedicalClinic, GroceryStore, ImageCollection
 
-from versatileimagefield.serializers import VersatileImageFieldSerializer
-
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework.response import Response
 
 from rest_framework import parsers
-from formencode.variabledecode import variable_decode
-
 
 
 class OpeningHourSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
@@ -231,7 +227,6 @@ class ListResturantSerializer(serializers.ModelSerializer):
 
     def get_image(self, obj):
         image = ImageCollectionSerializer.image.url()
-        return request.build_absolute_uri(image)
 
     class Meta:
         model = Resturant

@@ -1,15 +1,8 @@
 from django.db import models
 from user.models import User
-from versatileimagefield.fields import VersatileImageField
-from versatileimagefield.placeholder import OnDiscPlaceholderImage
 import os
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
-from upload_validator import FileTypeValidator
-from any_imagefield.models import AnyImageField
-from upload_validator import FileTypeValidator
-
-
 
 
 class Governorate(models.Model):
@@ -52,13 +45,10 @@ class ImageCollection(models.Model):
     image = models.ImageField(
                 max_length=254,
                 null=True, upload_to='places/', 
-                blank=True, default='default.jpg',
-                validators=[FileTypeValidator(
-                    allowed_types=['image/jpeg','image/png']
-                )])
+                blank=True, default='default.jpg',)
+                
 
-    def __unicode__(self):
-        return self.title
+    
 
     
     

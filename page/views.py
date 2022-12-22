@@ -28,19 +28,17 @@ from rest_framework import status
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser, FormParser
 
 from rest_framework import parsers
-from formencode.variabledecode import variable_decode
 
 
-class MultipartFormencodeParser(parsers.MultiPartParser):
+# class MultipartFormencodeParser(parsers.MultiPartParser):
 
-    def parse(self, stream, media_type=None, parser_context=None):
-        result = super().parse(
-            stream,
-            media_type=media_type,
-            parser_context=parser_context
-        )
-        data = variable_decode(result.data)
-        return parsers.DataAndFiles(data, result.files)
+#     def parse(self, stream, media_type=None, parser_context=None):
+#         result = super().parse(
+#             stream,
+#             media_type=media_type,
+#             parser_context=parser_context
+#         )
+#         return parsers.DataAndFiles(data, result.files)
 
 class ImageCollectionModelViewSet(ModelViewSet, generics.CreateAPIView):
     queryset = ImageCollection.objects.all()
@@ -50,14 +48,6 @@ class ImageCollectionModelViewSet(ModelViewSet, generics.CreateAPIView):
     permission_classes = []
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
-
-    @action(methods=['post'], detail=True, permission_classes=[])
-    def upload_docs(request):
-        try:
-            file = request.data['file']
-        except KeyError:
-            raise ParseError('Request has no resource file attached')
-        image = ImageCollection.objects.create(image=file)
 
     def get_permissions(self):
         if self.action in ['create', 'destroy', 'partial_update', 'update']:
@@ -84,14 +74,7 @@ class RestaurantModelViewSet(ModelViewSet, generics.CreateAPIView, generics.List
     #         self.serializer_class = ListResturantSerializer
     #     return super().get_serializer_class()
 
-    @action(methods=['post'], detail=True, permission_classes=[])
-    def upload_docs(request):
-        try:
-            file = request.data['file']
-        except KeyError:
-            raise ParseError('Request has no resource file attached')
-        image = ImageCollection.objects.create(image=file)
-        return Response(serializer.data.file)
+    
 
     # def create(self, request, *args, **kwargs):
     #     serializer = self.get_serializer(data=request.data)

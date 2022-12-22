@@ -43,27 +43,22 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'django_filters',
-    'versatileimagefield',
     "corsheaders",
-    'rest_framework_tricks',
-    'nested_relations',
-    'any_imagefield',
     'page',
     'user',
-    'address',
 ]
 
-GOOGLE_API_KEY = 'AIzaSyD--your-google-maps-key-SjQBE'
 
 REST_FRAMEWORK = {
     
-     'DEFAULT_PARSER_CLASSES': [
+    'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework.authentication.TokenAuthentication'
     ],
+
     'DEFAULT_PERMISSION_CLASSES':[
         'rest_framework.permissions.IsAuthenticated'
     ],
@@ -72,6 +67,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    
     'UPLOADED_FILES_USE_URL': True,
     
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
@@ -121,11 +117,11 @@ WSGI_APPLICATION = 'beqala.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": os.environ.get("DB_DATABASE"),
-        "USER": os.environ.get("DB_USERNAME"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_HOST"),
-        "PORT": os.environ.get("DB_PORT"),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -137,12 +133,15 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
+
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
+
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
+    
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
